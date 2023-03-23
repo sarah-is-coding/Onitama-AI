@@ -62,7 +62,6 @@ struct GameState {
 };
 
 void printBoard(const std::vector<std::vector<Piece>> &board);
-void generateUniqueRandomIndices(int range, std::vector<int> &randomIndices, RandomEngine& random_engine);
 void applyMove(GameState &state, const Move &move);
 void checkWinner(GameState &state, const Move &move, Piece &targetPiece);
 bool isMoveValid(const GameState &state, const Move &move);
