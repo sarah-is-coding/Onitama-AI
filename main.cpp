@@ -61,10 +61,13 @@ struct GameState {
     Player winner;
 };
 
+void printBoard(const std::vector<std::vector<Piece>> &board);
+void generateUniqueRandomIndices(int range, std::vector<int> &randomIndices, RandomEngine& random_engine);
+void applyMove(GameState &state, const Move &move);
+void checkWinner(GameState &state, const Move &move, Piece &targetPiece);
 bool isMoveValid(const GameState &state, const Move &move);
 void generateLegalMoves(GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveCards);
 int evaluate(const GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveCards);
-void applyMove(GameState &state, const Move &move);
 int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maximizingPlayer, Move &bestMove, MoveCard *redMoveCards, MoveCard *blueMoveCards);
 
 
