@@ -15,4 +15,6 @@ The main function initializes the game state, including the board, move cards fo
 ## Conclusion
 This code implements the Onitama game algorithm using the MiniMax algorithm with alpha-beta pruning. It is a complex game that requires strategic thinking and planning to win. The code is well-written and easy to understand.
 
-I am working to add functionality to allow players to play against the AI, which would make it even more interesting and engaging. Right now you just watch two AI's play against each other.
+## Future Improvements
+
+I am working to add functionality to allow players to play against the AI, which would make it even more interesting and engaging. Right now you just watch two AI's play against each other. Also, in the real game you can see the next card that will fill your hand once you make your turn. You can see the opponents as well. This is something that needs to be added. I may make a GUI for this in the future as well.
