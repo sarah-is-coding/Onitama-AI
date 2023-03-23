@@ -189,10 +189,14 @@ int main() {
 
         // Remove value equlivalent to bestMove.usedCard from the Deck
         Deck.erase(std::remove_if(Deck.begin(), Deck.end(), [&bestMove](const MoveCard &card) {
-            //return card.name == bestMove.usedCard.name;
             return card == bestMove.usedCard;
 
         }), Deck.end());
+
+        // if the deck is empty refill it
+        if (Deck.size() == 0){
+            Deck = {Tiger, Dragon, Frog, Rabbit, Crab, Elephant, Goose, Rooster, Monkey, Mantis, Horse, Ox, Crane, Boar, Eel, Cobra};
+        }
 
         // Swap out player cards 
         std::vector<int> nextCardIndices;
@@ -336,6 +340,22 @@ int evaluate(const GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveC
 }
 
 int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maximizingPlayer, Move &bestMove, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
+    /**
+    MiniMax algorithm implementation with Alpha-Beta pruning for the Onitama board game.
+    This function performs a depth-limited search using the MiniMax algorithm and Alpha-Beta pruning
+    to find the best move for the current player in the given game state. The search depth can be
+    adjusted to control the complexity and performance of the algorithm.
+
+    @param state The current game state.
+    @param depth The remaining search depth for the algorithm.
+    @param alpha The current best value for the maximizing player.
+    @param beta The current best value for the minimizing player.
+    @param maximizingPlayer A boolean value, true if the current player is maximizing, false if minimizing.
+    @param bestMove A reference to a Move object, which will store the best move found by the algorithm.
+    @param redMoveCards A pointer to an array of MoveCard objects for the red player.
+    @param blueMoveCards A pointer to an array of MoveCard objects for the blue player.
+    @return The evaluation score of the best move found.
+    **/
 
     if (depth == 0 || state.winner != NONE) {
         return evaluate(state, redMoveCards, blueMoveCards);;
