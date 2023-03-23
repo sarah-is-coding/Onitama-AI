@@ -17,4 +17,4 @@ NOTE: If the code runs an infinite loop just run it again until it doesn't. It i
 ## Conclusion
 This code implements the Onitama game algorithm using the MiniMax algorithm with alpha-beta pruning. It is a complex game that requires strategic thinking and planning to win. The code is well-written and easy to understand, making it an excellent resource for anyone looking to learn more about game programming or the MiniMax algorithm. 
 
-I am working to add functionality to allow players to play against an AI, which would make it even more interesting and engaging.
+I am working to add functionality to allow players to play against the AI, which would make it even more interesting and engaging. Right now you just watch two AI's play against each other.
