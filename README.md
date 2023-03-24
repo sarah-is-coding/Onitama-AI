@@ -22,4 +22,4 @@ I am working to add functionality to allow players to play against the AI, which
 Improve evaluation function.
 * more points for control of center of the board
 * more points for a protected master
-* more points for current player whose master is closer to the targeted temple
+* more points for a master closer to the targeted temple
