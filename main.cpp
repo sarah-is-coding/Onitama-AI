@@ -146,7 +146,7 @@ void applyMove(GameState &state, const Move &move, MoveCard *redMoveCards, MoveC
 
 }
 
-void checkWinner(GameState &state, const Move &move, Piece &targetPiece) {
+void checkWinner(GameState &state, const Move &move, Piece &targetPiece, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
 /**
  * Checks if the given move results in a win condition for the current player.
  * This function checks if the move results in a win condition, either by capturing the opponent's
@@ -169,6 +169,9 @@ void checkWinner(GameState &state, const Move &move, Piece &targetPiece) {
         state.winner = state.currentPlayer;
         std::cout << (state.winner == RED ? "Red" : "Blue") << " player wins by Way of the Stream!" << std::endl;
     }
+    std::cout << redMoveCards[0].name << " " << redMoveCards[1].name << std::endl;
+    printBoard(state.board);
+    std::cout << blueMoveCards[0].name << " " << blueMoveCards[1].name << std::endl;
 }
 
 std::ostream& operator<<(std::ostream &os, const MoveCard &moveCard) {
@@ -228,7 +231,7 @@ int main() {
         applyMove(state, bestMove, redMoveCards, blueMoveCards);
 
         // Check if the move bestMove results in a win
-        checkWinner(state, bestMove, targetPiece);
+        checkWinner(state, bestMove, targetPiece, redMoveCards, blueMoveCards);
 
         // Remove value equlivalent to bestMove.usedCard from the Deck
         Deck.erase(std::remove_if(Deck.begin(), Deck.end(), [&bestMove](const MoveCard &card) {
