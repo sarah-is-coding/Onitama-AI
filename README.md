@@ -20,6 +20,13 @@ The code implements several functions, including isMoveValid, generateLegalMoves
 
 The main function initializes the game state, including the board, move cards for both players, and the current player. It then loops through the game, searching for the best move using the MiniMax algorithm with alpha-beta pruning. Once the best move is found, it is applied to the game state, and the move cards for the current player are updated. The current player is then updated, and the loop continues until a winner is determined.
 
+Here is an example of a running state of the board:
+_ r R r r 
+r _ _ _ _ 
+_ _ _ _ _ 
+_ _ _ B _ 
+b b _ b b 
+
 ## Conclusion
 This code implements the Onitama game algorithm using the MiniMax algorithm with alpha-beta pruning. It is a complex game that requires strategic thinking and planning to win. The code is well-written and easy to understand.
 
