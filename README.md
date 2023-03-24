@@ -14,7 +14,7 @@ Onitama is a two-player abstract board game that originated in Japan. This code 
 ## Code Breakdown
 The code is written in C++, and it uses several data structures and algorithms. The code begins by defining the size of the board, the maximum search depth for the MiniMax algorithm, and the structure for the move cards. The move cards define the possible moves a player can make on a turn. There are sixteen move cards in total, each with a unique name, movement pattern, and number of moves.
 
-The code defines the game state, which includes the board, legal moves, the current player, and the winner. The board is a 5x5 grid that represents the game board. The legal moves are the possible moves a player can make on their turn. The current player is the player whose turn it is, and the winner is the player who wins the game.
+The board is a 5x5 grid that represents the game board. The legal moves are the possible moves a player can make on their turn. The current player is the player whose turn it is, and the winner is the player who wins the game.
 
 The code implements several functions, including isMoveValid, generateLegalMoves, evaluate, and applyMove. The isMoveValid function checks if a move is valid. The generateLegalMoves function generates all possible legal moves for the current player. The evaluate function evaluates the game state and returns a score. The applyMove function applies a move to the game state.
 
