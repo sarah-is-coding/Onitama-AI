@@ -43,7 +43,7 @@ Improve evaluation function.
 
 Add functionality to allow players to play against the AI 
 
-In the real game you can see the next card that will fill your hand once you make your turn. You can see the opponents as well. This is something that needs to be added. 
+In the real game you can see the next card that will fill your hand. You can see the opponents as well. This is something that needs to be added. 
 
 Make a visually appealing GUI
 
