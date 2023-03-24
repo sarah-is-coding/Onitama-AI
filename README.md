@@ -22,11 +22,13 @@ The main function initializes the game state, including the board, move cards fo
 
 Here is an example of a running state of the board:
 ```
+Tiger Goose
 _ r R r r 
 r _ _ _ _ 
 _ _ _ _ _ 
-_ _ _ B _ 
+_ B _ _ _ 
 b b _ b b 
+Frog Ox
 ```
 
 ## Conclusion
