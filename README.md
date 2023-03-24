@@ -4,9 +4,11 @@
 Onitama is a two-player abstract board game that originated in Japan. This code implements an Onitama game algorithm using the MiniMax algorithm with alpha-beta pruning to search for the best move. Onitama is a game where two players try to capture each other's master piece or move their master piece into the opponent's temple. Each player starts with five pieces: one master and four students. Each turn, a player can move one of their pieces using a move card. The move cards specify which piece can move and how it can move. The game ends when one player captures the opponent's master piece or moves their own master piece into the opponent's temple.
 
 Game Board
+
 <img src="https://i.imgur.com/xmgOsv6.png" width=50% height=50%>
 
 Move Cards
+
 <img src="https://i.imgur.com/c850hXb.png" width=50% height=50%>
 
 ## Code Breakdown
