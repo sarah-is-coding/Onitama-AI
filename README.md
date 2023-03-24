@@ -58,9 +58,9 @@ Frog Ox
 Add functionality to allow players to play against the AI 
 
 Improve evaluation function.
-* more points for a protected master
-* more points for control of the center of the board
-* more points for a master closer to the targeted temple
+* more points for a protected master, weight 7
+* more points for control of the center of the board, weight 5
+* more points for a master closer to the targeted temple, weight 2
 
 In the real game you can see the next card that will fill your hand. You can see the opponents as well. This is something that needs to be added. 
 
