@@ -36,12 +36,12 @@ This code implements the Onitama game algorithm using the MiniMax algorithm with
 
 ## Future Improvements Checklist
 
+Add functionality to allow players to play against the AI 
+
 Improve evaluation function.
 * more points for a protected master
 * more points for control of the center of the board
 * more points for a master closer to the targeted temple
-
-Add functionality to allow players to play against the AI 
 
 In the real game you can see the next card that will fill your hand. You can see the opponents as well. This is something that needs to be added. 
 
