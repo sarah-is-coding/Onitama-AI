@@ -373,7 +373,7 @@ int evaluate(const GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveC
         for (int x = 0; x < BOARD_SIZE; ++x) {
             Piece piece = state.board[y][x];
             if (piece == RED_STUDENT || piece == RED_MASTER) {
-                score += (piece == RED_MASTER) ? 100 : 1;
+                score += (piece == RED_MASTER) ? 10 : 1;
 
                 // Check if the piece is not in a position to be captured on the next turn
                 for (size_t i = 0; i < 2; ++i) {
@@ -394,7 +394,7 @@ int evaluate(const GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveC
                     }
                 }
             } else if (piece == BLUE_STUDENT || piece == BLUE_MASTER) {
-                score -= (piece == BLUE_MASTER) ? 100 : 1;
+                score -= (piece == BLUE_MASTER) ? 10 : 1;
 
                 // Check if the piece is not in a position to be captured on the next turn
                 for (size_t i = 0; i < 2; ++i) {
