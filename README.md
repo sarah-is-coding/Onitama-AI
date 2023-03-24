@@ -12,13 +12,35 @@ Onitama is a two-player abstract board game that originated in Japan. This code 
 <img src="https://i.imgur.com/c850hXb.png" width=50% height=50%>
 
 ## Code Breakdown
-The code is written in C++, and it uses several data structures and algorithms. The code begins by defining the size of the board, the maximum search depth for the MiniMax algorithm, and the structure for the move cards. The move cards define the possible moves a player can make on a turn. There are sixteen move cards in total, each with a unique name, movement pattern, and number of moves.
+Include statements:
+The code includes necessary libraries, such as iostream, utility, and vector.
 
-The board is a 5x5 grid that represents the game board. The legal moves are the possible moves a player can make on their turn. The current player is the player whose turn it is, and the winner is the player who wins the game.
+Constants:
+The code defines constants for board size, number of cards in the game, number of cards per player, and the depth of the search.
 
-The code implements several functions, including isMoveValid, generateLegalMoves, evaluate, and applyMove. The isMoveValid function checks if a move is valid. The generateLegalMoves function generates all possible legal moves for the current player. The evaluate function evaluates the game state and returns a score. The applyMove function applies a move to the game state.
+Enums:
+Enums are defined for the different players and game pieces, to improve code readability and reduce errors.
 
-The main function initializes the game state, including the board, move cards for both players, and the current player. It then loops through the game, searching for the best move using the MiniMax algorithm with alpha-beta pruning. Once the best move is found, it is applied to the game state, and the move cards for the current player are updated. The current player is then updated, and the loop continues until a winner is determined.
+Game state representation:
+The board state is represented as a 2D character array, with 'r' and 'b' representing the two player's students, and 'R' and 'B' representing their masters. The cards are represented as a string, with their moves being a vector of pairs of integers.
+
+Utility functions:
+Several utility functions are implemented, such as printing the board, converting strings to lower or upper case, and finding the master's position for each player.
+
+Move validation:
+Functions for validating moves are implemented, such as checking whether a move is within the board's boundaries, whether a square is occupied, or whether a move is valid for a given card.
+
+Game state manipulation:
+Functions for applying and undoing moves are implemented, updating the game state accordingly. These are essential for traversing the game tree during the search process.
+
+Game outcome evaluation:
+A function to evaluate whether a player has won, lost, or if the game is a draw is implemented. It checks for both conditions of winning, i.e., capturing the opponent's master or moving one's own master to the opponent's temple.
+
+Alpha-Beta pruning algorithm:
+The core of the AI's decision-making process, the Alpha-Beta pruning algorithm, is implemented as a recursive function. It efficiently searches the game tree by pruning branches that will not result in better outcomes, reducing the search space and speeding up computation. The function also takes depth into account, allowing for a configurable level of lookahead.
+
+Main function:
+The main function initializes the game state and runs the AI. It takes turns for each player, printing the board, reading and applying moves, and checking for the game's end. It also demonstrates the AI's ability to play against itself by simulating both players as AI agents.
 
 Here is an example of a running state of the board:
 ```
