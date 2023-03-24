@@ -53,9 +53,6 @@ b b _ b b
 Frog Ox
 ```
 
-## Conclusion
-This code implements the Onitama game algorithm using the MiniMax algorithm with alpha-beta pruning. It is a complex game that requires strategic thinking and planning to win. The code is well-written and easy to understand.
-
 ## Future Improvements Checklist
 
 Add functionality to allow players to play against the AI 
