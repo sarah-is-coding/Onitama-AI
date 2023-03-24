@@ -13,7 +13,7 @@ Onitama is a two-player abstract board game that originated in Japan. This code 
 
 ## Code Breakdown
 Include statements
-* The code includes necessary libraries, such as iostream, utility, and vector.
+* The code includes necessary libraries, such as iostream, vector, limits, algorithm, ctime, string, random, and chrono.
 
 Constants
 * The code defines constants for board size, number of cards in the game, number of cards per player, and the depth of the search.
