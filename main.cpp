@@ -71,6 +71,15 @@ int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maxi
 
 
 void printBoard(const std::vector<std::vector<Piece>> &board) {
+/**
+ * Prints the Onitama board game state in a human-readable format.
+ * The printBoard function displays the current board state by iterating through the 2D
+ * board vector and printing the appropriate characters for each piece on the board.
+ * The output is formatted to display the board as a grid, with 'r' representing red students,
+ * 'R' for red master, 'b' for blue students, 'B' for blue master, and '_' for empty spaces.
+
+ * @param board A 2D vector of Piece enums representing the current game board.
+ */
     for (int col = BOARD_SIZE - 1; col >= 0; --col) {
         for (int row = 0; row < BOARD_SIZE; ++row) {
             char c;
@@ -100,6 +109,17 @@ void printBoard(const std::vector<std::vector<Piece>> &board) {
 
 template <typename RandomEngine>
 void generateUniqueRandomIndices(int range, std::vector<int> &randomIndices, RandomEngine& random_engine) {
+/**
+ * @brief Generates a vector of unique random indices within a specified range.
+ * 
+ * This function populates a vector with unique random indices ranging from 0 to range-1.
+ * The indices are then shuffled using the provided random engine to ensure uniqueness.
+ * This is typically used for sampling without replacement from a larger dataset.
+ * 
+ * @param range The range of indices to generate (0 to range-1).
+ * @param[out] randomIndices The vector to populate with unique random indices.
+ * @param random_engine The random engine used to shuffle the indices.
+ */
     for (int i = 0; i < range; i++) {
         randomIndices.push_back(i);
     }
@@ -108,13 +128,36 @@ void generateUniqueRandomIndices(int range, std::vector<int> &randomIndices, Ran
 }
 
 void applyMove(GameState &state, const Move &move, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
-    // Apply the move to the game state 
+/**
+ * Applies a move to the given game state, updating the board and players' positions.
+ * The applyMove function takes a GameState reference and a Move reference, as well as pointers to
+ * the red and blue players' move cards. It modifies the game state by moving the piece from its
+ * original position to the destination position specified in the Move. It also updates the players'
+ * positions on the board accordingly.
+    
+ * @param state A reference to the current game state.
+ * @param move A reference to the Move to be applied.
+ * @param redMoveCards A pointer to the red player's move cards.
+ * @param blueMoveCards A pointer to the blue player's move cards.
+ */
+   
     state.board[move.x2][move.y2] = state.board[move.x1][move.y1];
     state.board[move.x1][move.y1] = EMPTY;
 
 }
 
 void checkWinner(GameState &state, const Move &move, Piece &targetPiece) {
+/**
+ * Checks if the given move results in a win condition for the current player.
+ * This function checks if the move results in a win condition, either by capturing the opponent's
+ * master (Way of the Stone) or moving the player's own master to the opponent's temple (Way of the Stream).
+ * If a win condition is met, the function updates the game state's winner attribute and prints the
+ * winning message.
+    
+ * @param[in,out] state The current game state.
+ * @param[in] move The move to check for a win condition.
+ * @param[in] targetPiece The piece at the destination cell of the move (before the move is applied).
+ */
 
     if (state.currentPlayer == RED && targetPiece == BLUE_MASTER) {
         state.winner = RED;
@@ -224,6 +267,19 @@ int main() {
 }
 
 bool isMoveValid(GameState &state, Move &move) {
+/**
+ * Checks if a given move is valid according to the game rules.
+ * This function takes the current game state and a move as input, and checks if the move
+ * is valid based on the Onitama game rules. It considers the current player, the source and
+ * destination cells, as well as the target piece. The function returns true if the move is
+ * valid, and false otherwise.
+    
+ * @param state The current game state, including the board and current player.
+ * @param move The move to be checked for validity, including the used piece and card.
+ * @return true If the move is valid according to the game rules.
+ * @return false If the move is not valid according to the game rules.
+ */
+
     // Implement the game rules to check if the move is valid
     int x1 = move.x1;
     int y1 = move.y1;
@@ -250,7 +306,17 @@ bool isMoveValid(GameState &state, Move &move) {
 
 
 void generateLegalMoves(GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
-    // Generate all possible legal moves for the current player
+/**
+ * Generates all possible legal moves for the current player in the given game state.
+ * This function iterates through the game board, identifying the current player's pieces and
+ * generating a list of legal moves for each piece using the available move cards. The generated
+ * legal moves are stored in the game state's legalMoves vector.
+    
+ * @param[in, out] state Reference to the game state object containing the game board, current player, and legal moves vector.
+ * @param[in] redMoveCards Pointer to an array of move cards for the red player.
+ * @param[in] blueMoveCards Pointer to an array of move cards for the blue player.
+ */
+
     state.legalMoves.clear();
     MoveCard *moveCards = (state.currentPlayer == RED) ? redMoveCards : blueMoveCards;
     bool isRedPlayer = state.currentPlayer == RED;
@@ -285,6 +351,19 @@ void generateLegalMoves(GameState &state, MoveCard *redMoveCards, MoveCard *blue
 
 
 int evaluate(const GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
+/**
+ * Evaluates the game state for the current player.
+ * This function evaluates the game state for the current player and returns a score that represents the advantage
+ * of the current player over their opponent. The higher the score, the better the position is for the current player.
+ * The evaluation function considers factors such as the number of pieces remaining, the safety of each piece, and
+ * the possibility of winning by Way of the Stream.
+
+ * @param state The current GameState object representing the board and game state.
+ * @param redMoveCards A pointer to an array of red player's MoveCards.
+ * @param blueMoveCards A pointer to an array of blue player's MoveCards.
+ * @return An integer representing the advantage of the current player over their opponent.
+ */
+
     int score = 0;
 
     for (int y = 0; y < BOARD_SIZE; ++y) {
@@ -340,22 +419,22 @@ int evaluate(const GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveC
 }
 
 int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maximizingPlayer, Move &bestMove, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
-    /**
-    MiniMax algorithm implementation with Alpha-Beta pruning for the Onitama board game.
-    This function performs a depth-limited search using the MiniMax algorithm and Alpha-Beta pruning
-    to find the best move for the current player in the given game state. The search depth can be
-    adjusted to control the complexity and performance of the algorithm.
+/**
+ * MiniMax algorithm implementation with Alpha-Beta pruning for the Onitama board game.
+ * This function performs a depth-limited search using the MiniMax algorithm and Alpha-Beta pruning
+ * to find the best move for the current player in the given game state. The search depth can be
+ * adjusted to control the complexity and performance of the algorithm.
 
-    @param state The current game state.
-    @param depth The remaining search depth for the algorithm.
-    @param alpha The current best value for the maximizing player.
-    @param beta The current best value for the minimizing player.
-    @param maximizingPlayer A boolean value, true if the current player is maximizing, false if minimizing.
-    @param bestMove A reference to a Move object, which will store the best move found by the algorithm.
-    @param redMoveCards A pointer to an array of MoveCard objects for the red player.
-    @param blueMoveCards A pointer to an array of MoveCard objects for the blue player.
-    @return The evaluation score of the best move found.
-    **/
+ * @param state The current game state.
+ * @param depth The remaining search depth for the algorithm.
+ * @param alpha The current best value for the maximizing player.
+ * @param beta The current best value for the minimizing player.
+ * @param maximizingPlayer A boolean value, true if the current player is maximizing, false if minimizing.
+ * @param bestMove A reference to a Move object, which will store the best move found by the algorithm.
+ * @param redMoveCards A pointer to an array of MoveCard objects for the red player.
+ * @param blueMoveCards A pointer to an array of MoveCard objects for the blue player.
+ * @return The evaluation score of the best move found.
+ */
 
     if (depth == 0 || state.winner != NONE) {
         return evaluate(state, redMoveCards, blueMoveCards);;
