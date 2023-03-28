@@ -48,7 +48,8 @@ struct Move {
 
 struct GameState {
     vector< vector<Piece>> board;
-    vector<Move> legalMoves;
+    vector<Move> redLegalMoves;
+    vector<Move> blueLegalMoves;
     Player currentPlayer;
     Player winner;
 };

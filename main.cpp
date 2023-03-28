@@ -35,7 +35,7 @@ int main() {
     randomIndices.resize(4);
 
     MoveCard redMoveCards[2] = {Deck[randomIndices[0]], Deck[randomIndices[1]]};
-    MoveCard currentMoveCards[2] = {Deck[randomIndices[2]], Deck[randomIndices[3]]};
+    MoveCard blueMoveCards[2] = {Deck[randomIndices[2]], Deck[randomIndices[3]]};
 
     // remove intitialized cards from the running game deck
     for (auto it = randomIndices.rbegin(); it != randomIndices.rend(); ++it) {
@@ -68,9 +68,9 @@ int main() {
         printBorderScreen("Onitama");
         cout << redMoveCards[0].name << " " << redMoveCards[1].name <<  endl;
         printBoard(state.board);
-        cout << currentMoveCards[0].name << " " << currentMoveCards[1].name <<  endl;
+        cout << blueMoveCards[0].name << " " << blueMoveCards[1].name <<  endl;
 
-        generateLegalMoves(state, redMoveCards, currentMoveCards);
+        generateLegalMoves(state, redMoveCards, blueMoveCards);
 
         if (state.currentPlayer == BLUE){ // Human
 
@@ -95,17 +95,17 @@ int main() {
         else if (state.currentPlayer == RED){ // AI
 
             // Find the best move for the current player using MiniMax with alpha-beta pruning
-            int eval = miniMaxAlphaBeta(state, maxDepth, alpha, beta, state.currentPlayer == RED, currentMove, redMoveCards, currentMoveCards);
+            int eval = miniMaxAlphaBeta(state, maxDepth, alpha, beta, currentMove, redMoveCards, blueMoveCards);
 
         }
 
         // Store the state of the target piece before applying the move
         Piece targetPiece = state.board[currentMove.x2][currentMove.y2];
         // Apply the best move found
-        applyMove(state, currentMove, redMoveCards, currentMoveCards);
+        applyMove(state, currentMove, redMoveCards, blueMoveCards);
 
         // Check if the move currentMove results in a win
-        checkWinner(state, currentMove, targetPiece, redMoveCards, currentMoveCards);
+        checkWinner(state, currentMove, targetPiece, redMoveCards, blueMoveCards);
 
         // Remove value equlivalent to currentMove.usedCard from the Deck
         Deck.erase( remove_if(Deck.begin(), Deck.end(), [&currentMove](const MoveCard &card) {
@@ -129,10 +129,10 @@ int main() {
             currentMoveIndex = (redMoveCards[0] == currentMove.usedCard) ? 0 : 1;
             redMoveCards[currentMoveIndex] = Deck[nextCardIndices[0]];
         }
-            // grab index of currentMove.usedCard in currentMoveCards
+            // grab index of currentMove.usedCard in blueMoveCards
         else if (state.currentPlayer == BLUE){
-            currentMoveIndex = (currentMoveCards[0] == currentMove.usedCard) ? 0 : 1;
-            currentMoveCards[currentMoveIndex] = Deck[nextCardIndices[0]];
+            currentMoveIndex = (blueMoveCards[0] == currentMove.usedCard) ? 0 : 1;
+            blueMoveCards[currentMoveIndex] = Deck[nextCardIndices[0]];
         }
 
         // Update the current player

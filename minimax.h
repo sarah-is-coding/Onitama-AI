@@ -105,7 +105,8 @@ void generateLegalMoves(GameState &state, MoveCard *redMoveCards, MoveCard *blue
  * @param[in] blueMoveCards Pointer to an array of move cards for the blue player.
  */
 
-    state.legalMoves.clear();
+    state.redLegalMoves.clear();
+    state.blueLegalMoves.clear();
     MoveCard *moveCards = (state.currentPlayer == RED) ? redMoveCards : blueMoveCards;
     bool isRedPlayer = state.currentPlayer == RED;
 
@@ -128,7 +129,7 @@ void generateLegalMoves(GameState &state, MoveCard *redMoveCards, MoveCard *blue
                         move.usedPiece = piece;
 
                         if (isMoveValid(state, move)) {
-                            state.legalMoves.push_back(move);
+                            isRedPlayer ? state.redLegalMoves.push_back(move) : state.blueLegalMoves.push_back(move);
                         }
                     }
                 }
@@ -139,71 +140,71 @@ void generateLegalMoves(GameState &state, MoveCard *redMoveCards, MoveCard *blue
 
 
 int evaluate(const GameState &state, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
-/**
- * Evaluates the game state for the current player.
- * This function evaluates the game state for the current player and returns a score that represents the advantage
- * of the current player over their opponent. The higher the score, the better the position is for the current player.
- * The evaluation function considers factors such as the number of pieces remaining, the safety of each piece, and
- * the possibility of winning by Way of the Stream.
-
- * @param state The current GameState object representing the board and game state.
- * @param redMoveCards A pointer to an array of red player's MoveCards.
- * @param blueMoveCards A pointer to an array of blue player's MoveCards.
- * @return An integer representing the advantage of the current player over their opponent.
- */
-
     int score = 0;
+    const int CAPTURE_BLUE_POINTS = 2;
+    const int CAPTURE_BLUE_MASTER_POINTS = 20;
+    const int CAPTURE_RED_POINTS = -2;
+    const int CAPTURE_RED_MASTER_POINTS = -20;
+    const int PROTECT_POINTS = 1;
+    const int RED_MASTER_CLOSER_TO_TEMPLE_POINTS = 1;
+    const int BLUE_MASTER_CLOSER_TO_TEMPLE_POINTS = -1;
 
-    for (int y = 0; y < BOARD_SIZE; ++y) {
-        for (int x = 0; x < BOARD_SIZE; ++x) {
-            Piece piece = state.board[y][x];
+    for (int x = 0; x < BOARD_SIZE; ++x) {
+        for (int y = 0; y < BOARD_SIZE; ++y) {
+            Piece piece = state.board[x][y];
             if (piece == RED_STUDENT || piece == RED_MASTER) {
+                // More points if red piece hasn't been captured
                 score += (piece == RED_MASTER) ? 10 : 1;
 
-                // Check if the piece is not in a position to be captured on the next turn
-                for (size_t i = 0; i < 2; ++i) {
-                    MoveCard moveCard = blueMoveCards[i];
-                    bool safe = true;
-                    for (int i = 0; i < moveCard.numMoves; ++i) {
-                        int nx = x - moveCard.dx[i];
-                        int ny = y - moveCard.dy[i];
-                        if (nx >= 0 && nx < BOARD_SIZE && ny >= 0 && ny < BOARD_SIZE) {
-                            if (state.board[nx][ny] == BLUE_STUDENT || state.board[nx][ny] == BLUE_MASTER) {
-                                safe = false;
-                                break;
-                            }
+                // Check if red piece can capture a blue piece or protect another red piece
+                for (const Move &move : state.redLegalMoves) {
+                    if (move.x1 == x && move.y1 == y) {
+                        int newX = move.x2;
+                        int newY = move.y2;
+
+                        Piece target = state.board[newX][newY];
+                        if (target == BLUE_STUDENT) {
+                            score += CAPTURE_BLUE_POINTS;
+                        } else if (target == BLUE_MASTER) {
+                            score += CAPTURE_BLUE_MASTER_POINTS;
+                        } else if (target == RED_STUDENT || target == RED_MASTER) {
+                            score += PROTECT_POINTS;
                         }
-                    }
-                    if (safe) {
-                        score += (piece == RED_MASTER) ? 10 : 2;
                     }
                 }
+
+                // Check if the red master is closer to the blue temple
+                if (piece == RED_MASTER) {
+                    score += RED_MASTER_CLOSER_TO_TEMPLE_POINTS * (4 - abs(x - 2) - y);
+                }
             } else if (piece == BLUE_STUDENT || piece == BLUE_MASTER) {
+                // Less points if blue piece hasn't been captured
                 score -= (piece == BLUE_MASTER) ? 10 : 1;
 
-                // Check if the piece is not in a position to be captured on the next turn
-                for (size_t i = 0; i < 2; ++i) {
-                    MoveCard moveCard = redMoveCards[i];
-                    bool safe = true;
-                    for (int i = 0; i < moveCard.numMoves; ++i) {
-                        int nx = x + moveCard.dx[i];
-                        int ny = y + moveCard.dy[i];
-                        if (nx >= 0 && nx < BOARD_SIZE && ny >= 0 && ny < BOARD_SIZE) {
-                            if (state.board[nx][ny] == RED_STUDENT || state.board[nx][ny] == RED_MASTER) {
-                                safe = false;
-                                break;
-                            }
+                // Check if blue piece can capture a red piece
+                for (const Move &move : state.blueLegalMoves) {
+                    if (move.x1 == x && move.y1 == y) {
+                        int newX = move.x2;
+                        int newY = move.y2;
+
+                        Piece target = state.board[newX][newY];
+                        if (target == RED_STUDENT) {
+                            score += CAPTURE_RED_POINTS;
+                        } else if (target == RED_MASTER) {
+                            score += CAPTURE_RED_MASTER_POINTS;
                         }
                     }
-                    if (safe) {
-                        score -= (piece == BLUE_MASTER) ? 10 : 2;
-                    }
+                }
+
+                // Check if the blue master is closer to the red temple
+                if (piece == BLUE_MASTER) {
+                    score += BLUE_MASTER_CLOSER_TO_TEMPLE_POINTS * (4 - abs(x - 2) - (4 - y));
                 }
             }
         }
     }
 
-    return state.currentPlayer == RED ? score : -score;
+    return score;
 }
 
 void applyMove(GameState &state, const Move &move, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
@@ -225,7 +226,7 @@ void applyMove(GameState &state, const Move &move, MoveCard *redMoveCards, MoveC
 
 }
 
-int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maximizingPlayer, Move &bestMove, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
+int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, Move &bestMove, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
 /**
  * MiniMax algorithm implementation with Alpha-Beta pruning for the Onitama board game.
  * This function performs a depth-limited search using the MiniMax algorithm and Alpha-Beta pruning
@@ -236,7 +237,6 @@ int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maxi
  * @param depth The remaining search depth for the algorithm.
  * @param alpha The current best value for the maximizing player.
  * @param beta The current best value for the minimizing player.
- * @param maximizingPlayer A boolean value, true if the current player is maximizing, false if minimizing.
  * @param bestMove A reference to a Move object, which will store the best move found by the algorithm.
  * @param redMoveCards A pointer to an array of MoveCard objects for the red player.
  * @param blueMoveCards A pointer to an array of MoveCard objects for the blue player.
@@ -247,41 +247,23 @@ int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maxi
         return evaluate(state, redMoveCards, blueMoveCards);;
     }
 
-    if (maximizingPlayer) {
-        int maxEval =  numeric_limits<int>::min();
-        for (const auto &move : state.legalMoves) {
-            GameState nextState = state;
-            applyMove(nextState, move, redMoveCards, blueMoveCards);
-            Move dummyMove;
-            int eval = miniMaxAlphaBeta(nextState, depth - 1, alpha, beta, false, dummyMove, redMoveCards, blueMoveCards);
-            if (eval > maxEval) {
-                maxEval = eval;
-                bestMove = move;
-            }
-            alpha =  max(alpha, eval);
-            if (beta <= alpha) {
-                break;
-            }
+    int maxEval =  numeric_limits<int>::min();
+    for (const auto &move : state.redLegalMoves) {
+        GameState nextState = state;
+        applyMove(nextState, move, redMoveCards, blueMoveCards);
+        Move dummyMove;
+        int eval = miniMaxAlphaBeta(nextState, depth - 1, alpha, beta, dummyMove, redMoveCards, blueMoveCards);
+        if (eval > maxEval) {
+            maxEval = eval;
+            bestMove = move;
         }
-        return maxEval;
-    } else {
-        int minEval =  numeric_limits<int>::max();
-        for (const auto &move : state.legalMoves) {
-            GameState nextState = state;
-            applyMove(nextState, move, redMoveCards, blueMoveCards);
-            Move dummyMove;
-            int eval = miniMaxAlphaBeta(nextState, depth - 1, alpha, beta, true, dummyMove, redMoveCards, blueMoveCards);
-            if (eval < minEval) {
-                minEval = eval;
-                bestMove = move;
-            }
-            beta =  min(beta, eval);
-            if (beta <= alpha) {
-                break;
-            }
+        alpha =  max(alpha, eval);
+        if (beta <= alpha) {
+            break;
         }
-        return minEval;
     }
+    return maxEval;
+
 }
 
 
