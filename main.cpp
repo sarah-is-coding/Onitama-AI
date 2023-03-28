@@ -95,7 +95,7 @@ int main() {
         else if (state.currentPlayer == RED){ // AI
 
             // Find the best move for the current player using MiniMax with alpha-beta pruning
-            int eval = miniMaxAlphaBeta(state, maxDepth, alpha, beta, currentMove, redMoveCards, blueMoveCards);
+            int eval = miniMaxAlphaBeta(state, maxDepth, alpha, beta, true, currentMove, redMoveCards, blueMoveCards);
 
         }
 

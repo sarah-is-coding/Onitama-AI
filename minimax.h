@@ -226,7 +226,7 @@ void applyMove(GameState &state, const Move &move, MoveCard *redMoveCards, MoveC
 
 }
 
-int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, Move &bestMove, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
+int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, bool maximizingPlayer, Move &bestMove, MoveCard *redMoveCards, MoveCard *blueMoveCards) {
 /**
  * MiniMax algorithm implementation with Alpha-Beta pruning for the Onitama board game.
  * This function performs a depth-limited search using the MiniMax algorithm and Alpha-Beta pruning
@@ -237,6 +237,7 @@ int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, Move &bes
  * @param depth The remaining search depth for the algorithm.
  * @param alpha The current best value for the maximizing player.
  * @param beta The current best value for the minimizing player.
+ * @param maximizingPlayer A boolean value, true if the current player is maximizing, false if minimizing.
  * @param bestMove A reference to a Move object, which will store the best move found by the algorithm.
  * @param redMoveCards A pointer to an array of MoveCard objects for the red player.
  * @param blueMoveCards A pointer to an array of MoveCard objects for the blue player.
@@ -247,23 +248,41 @@ int miniMaxAlphaBeta(GameState &state, int depth, int alpha, int beta, Move &bes
         return evaluate(state, redMoveCards, blueMoveCards);;
     }
 
-    int maxEval =  numeric_limits<int>::min();
-    for (const auto &move : state.redLegalMoves) {
-        GameState nextState = state;
-        applyMove(nextState, move, redMoveCards, blueMoveCards);
-        Move dummyMove;
-        int eval = miniMaxAlphaBeta(nextState, depth - 1, alpha, beta, dummyMove, redMoveCards, blueMoveCards);
-        if (eval > maxEval) {
-            maxEval = eval;
-            bestMove = move;
+    if (maximizingPlayer) {
+        int maxEval =  numeric_limits<int>::min();
+        for (const auto &move : state.redLegalMoves) {
+            GameState nextState = state;
+            applyMove(nextState, move, redMoveCards, blueMoveCards);
+            Move dummyMove;
+            int eval = miniMaxAlphaBeta(nextState, depth - 1, alpha, beta, false, dummyMove, redMoveCards, blueMoveCards);
+            if (eval > maxEval) {
+                maxEval = eval;
+                bestMove = move;
+            }
+            alpha =  max(alpha, eval);
+            if (beta <= alpha) {
+                break;
+            }
         }
-        alpha =  max(alpha, eval);
-        if (beta <= alpha) {
-            break;
+        return maxEval;
+    } else {
+        int minEval =  numeric_limits<int>::max();
+        for (const auto &move : state.blueLegalMoves) {
+            GameState nextState = state;
+            applyMove(nextState, move, redMoveCards, blueMoveCards);
+            Move dummyMove;
+            int eval = miniMaxAlphaBeta(nextState, depth - 1, alpha, beta, true, dummyMove, redMoveCards, blueMoveCards);
+            if (eval < minEval) {
+                minEval = eval;
+                bestMove = move;
+            }
+            beta =  min(beta, eval);
+            if (beta <= alpha) {
+                break;
+            }
         }
+        return minEval;
     }
-    return maxEval;
-
 }
 
 
