@@ -40,7 +40,7 @@ Alpha-Beta pruning algorithm
 * The core of the AI's decision-making process, the Alpha-Beta pruning algorithm, is implemented as a recursive function. It efficiently searches the game tree by    pruning branches that will not result in better outcomes, reducing the search space and speeding up computation. The function also takes depth into account, allowing for a configurable level of lookahead.
 
 Main function
-* The main function initializes the game state and runs the AI. It takes turns for each player, printing the board, reading and applying moves, and checking for the game's end. It also demonstrates the AI's ability to play against itself by simulating both players as AI agents.
+* The main function initializes the game state and runs the AI. It manages the turns for each player, printing the board, asking for moves, reading and applying moves, and checking for the game's end. 
 
 Here is an example of a running state of the board:
 ```
@@ -55,12 +55,7 @@ Frog Ox
 
 ## Future Improvements Checklist
 
-Add functionality to allow players to play against the AI 
-
 Improve evaluation function.
-* more points for a protected master, weight 7
-* more points for control of the center of the board, weight 5
-* more points for a master closer to the opponents temple, weight 2
 
 In the real game you can see the next card that will fill your hand. You can see the opponents as well. This is something that needs to be added. 
 
